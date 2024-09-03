@@ -56,15 +56,15 @@
                 <form method = "POST" action="update_todos.php">
                 <input type="hidden" name="task_status" value="<?= $tasks["completed"]; ?>" />
                 <input type="hidden" name="label_id" value="<?= $tasks["id"]; ?>" />
-                  <!-- If task status = 1 (complete), then colour the box as green with a checkmark -->
+                  <!-- If task status = 1 (complete), then colour the box as green with a checkmark and strikethrough text-->
                   <?php if ($tasks["completed"] == 1) : ?>
                     <button class="btn btn-sm btn-success"><i class="bi bi-check-square"></i></button>
+                    <span class="ms-2"><del><?= $index+1?>. <?=$tasks["label"]?></del></span>
                   <!-- If task status = 0 (incomplete), then colour the box as white without the checkmark -->
                   <?php else : ?>
                     <button class="btn btn-sm"><i class="bi bi-square"></i></button>
+                    <span class="ms-2"><?= $index+1?>. <?=$tasks["label"]?></span>
                   <?php endif; ?>
-                  <!-- Printing out the tasks -->
-                  <span class="ms-2"><?= $index+1?>. <?=$tasks["label"]?></span>
                 </form>
               </div>
               <div>
