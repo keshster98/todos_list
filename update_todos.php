@@ -1,4 +1,5 @@
 <?php
+  // Connecting to database
   $host = 'localhost'; 
   $database_name = "todos_list"; 
   $database_user = "root";
@@ -23,19 +24,18 @@
     $task_status = 0;
   }
 
+  // Update task based on if/else statement outcome
+
   // SQL Command (Recipe)
   $sql = "UPDATE todos SET completed = :task_status WHERE id = :label_id";
-
   // Prepare SQL query (Prepare Ingredients)
   $query = $database->prepare($sql);
-  
   // Execute SQL query (Cook)
   $query->execute([
       'task_status' => $task_status,
       'label_id' => $label_id
   ]);        
-
-  // Redirect user back to index.php after thes process
+  // Redirect user back to index.php after the process
   header("Location: index.php");
   exit;
 ?>

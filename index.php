@@ -1,10 +1,11 @@
 <?php
+  // Start session in the event of login
+  session_start();
   // Collect database info
   $host = 'localhost'; // For Windows user
   $database_name = "todos_list"; // Connecting to a specific database 
   $database_user = "root"; // MySQL Username
   $database_password = "123"; // MySQL Password
-
   // Connect to database (PDO - PHP database object)
   $database = new PDO(
     "mysql:host=$host;dbname=$database_name",
@@ -12,7 +13,7 @@
     $database_password 
   );
 
-  // Get students data from the database
+  // Get todos data from the database
 
   // SQL Command (Recipe)
   $sql = "SELECT * FROM todos";
@@ -48,47 +49,67 @@
     <div class="card rounded shadow-sm" style="max-width: 500px; margin: 60px auto;">
       <div class="card-body">
         <h3 class="card-title mb-3">My Todo List</h3>
-        <ul class="list-group">
-          <!-- Iterate through the todos table to print out tasks -->
-          <?php foreach($todos as $index => $tasks) : ?>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <div>
-                <form method = "POST" action="update_todos.php">
-                <input type="hidden" name="task_status" value="<?= $tasks["completed"]; ?>" />
-                <input type="hidden" name="label_id" value="<?= $tasks["id"]; ?>" />
-                  <!-- If task status = 1 (complete), then colour the box as green with a checkmark and strikethrough text-->
-                  <?php if ($tasks["completed"] == 1) : ?>
-                    <button class="btn btn-sm btn-success"><i class="bi bi-check-square"></i></button>
-                    <span class="ms-2"><del><?= $index+1?>. <?=$tasks["label"]?></del></span>
-                  <!-- If task status = 0 (incomplete), then colour the box as white without the checkmark -->
-                  <?php else : ?>
-                    <button class="btn btn-sm"><i class="bi bi-square"></i></button>
-                    <span class="ms-2"><?= $index+1?>. <?=$tasks["label"]?></span>
-                  <?php endif; ?>
-                </form>
-              </div>
-              <div>
-                <form method = "POST" action="delete_todos.php">
-                  <input type="hidden" name="task_id" value="<?= $tasks["id"]; ?>" />
-                  <!-- Delete task button -->
-                  <button class="btn btn-sm btn-danger">
-                      <i class="bi bi-trash"></i>
-                  </button>
-                </form>
-              </div>
-            </li>
-          <?php endforeach; ?>
-        </ul>
-        <div class="mt-4">
-          <!-- Add task text area -->
-          <form class="d-flex justify-content-between align-items-center" method = "POST" action = "add_todos.php">
-            <input type ="text" class ="form-control" placeholder ="Add new item..." name = "new_task"/>
-            <!-- Add task button -->
-            <button class="btn btn-primary btn-sm rounded ms-2">Add</button>
-          </form>
-        </div>
+        <!-- Show if user has logged in -->
+        <?php if(isset($_SESSION['user'])) : ?>
+          <h4 class="mb-4">Welcome back, <?= $_SESSION['user']['name']; ?>!</h4>
+          <ul class="list-group">
+            <!-- Iterate through the todos table to print out tasks -->
+            <?php foreach($todos as $index => $tasks) : ?>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <form method = "POST" action="update_todos.php">
+                  <input type="hidden" name="task_status" value="<?= $tasks["completed"]; ?>" />
+                  <input type="hidden" name="label_id" value="<?= $tasks["id"]; ?>" />
+                    <!-- If task status = 1 (complete), then colour the box as green with a checkmark and strikethrough text-->
+                    <?php if ($tasks["completed"] == 1) : ?>
+                      <button class="btn btn-sm btn-success"><i class="bi bi-check-square"></i></button>
+                      <span class="ms-2"><del><?= $index+1?>. <?=$tasks["label"]?></del></span>
+                    <!-- If task status = 0 (incomplete), then colour the box as white without the checkmark -->
+                    <?php else : ?>
+                      <button class="btn btn-sm"><i class="bi bi-square"></i></button>
+                      <span class="ms-2"><?= $index+1?>. <?=$tasks["label"]?></span>
+                    <?php endif; ?>
+                  </form>
+                </div>
+                <div>
+                  <form method = "POST" action="delete_todos.php">
+                    <input type="hidden" name="task_id" value="<?= $tasks["id"]; ?>" />
+                    <!-- Delete task button -->
+                    <button class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                </div>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        <!-- Show if user has not logged in -->
+        <?php else : ?>
+          <!-- Login button -->
+          <button class="btn btn-success"><a style="text-decoration: none; color: inherit" href="login.php">Login</a></button>
+          <!-- Sign up button -->
+          <button class="btn btn-primary"><a style="text-decoration: none; color: inherit" href="signup.php">Sign Up</a></button>
+        <?php endif; ?>
+        <!-- Show if user has logged in -->
+        <?php if(isset($_SESSION['user'])) : ?>
+          <div class="mt-4">
+            <!-- Add task text area -->
+            <form class="d-flex justify-content-between align-items-center" method = "POST" action = "add_todos.php">
+              <input type ="text" class ="form-control" placeholder ="Add new item..." name = "new_task"/>
+              <!-- Add task button -->
+              <button class="btn btn-primary btn-sm rounded ms-2">Add</button>
+            </form>
+          </div>
+        <?php endif; ?>
       </div>
     </div>
+    <!-- Show if user has logged in -->
+    <?php if(isset($_SESSION['user'])) : ?>
+    <div class="d-flex justify-content-center align-items-center">
+      <!-- Logout button  -->
+      <button class="btn btn-danger"><a style="text-decoration: none; color: inherit" href="logout.php">Logout</a></button>
+    </div>
+    <?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

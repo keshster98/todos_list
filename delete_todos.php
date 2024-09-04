@@ -1,4 +1,5 @@
 <?php
+  // Connecting to database
   $host = 'localhost'; 
   $database_name = "todos_list"; 
   $database_user = "root";
@@ -13,17 +14,16 @@
   // Storing the id of the task to be deleted
   $task_id = $_POST["task_id"];
 
+  // Delete the selected task
+
   // SQL Command (Recipe)
   $sql = "DELETE FROM todos where id = :id";
-
   // Prepare SQL query (Prepare Ingredients)
   $query = $database->prepare($sql);
-
   // Execute SQL query (Cook)
   $query->execute([
       'id' => $task_id
   ]);
-
   // Redirect user back to index.php after the process
   header("Location: index.php");
   exit;

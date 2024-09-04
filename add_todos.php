@@ -1,4 +1,5 @@
 <?php
+  // Connecting to database
   $host = 'localhost'; 
   $database_name = "todos_list"; 
   $database_user = "root";
@@ -10,28 +11,24 @@
     $database_password 
   );
 
-  // Storing new task name into $task
+  // Storing new task name
   $task = $_POST["new_task"];
     
-  // Check whether the user inserts a name
+  // Check whether the user inserts a task
   if(empty($task)){
-    // Send alert message if user does not insert a name
+    // Send alert message if user does not insert a task
     echo '<script>alert("Please insert a task!");history.go(-1);</script>';
   }
+  // Store task in the database if the above check has passed
   else{
-      // If there is a name, add the name to database
-
       // SQL Command (Recipe)
-      $sql = 'INSERT INTO todos (`label`) VALUES (:task)'; //:name where : acts as a placeholder, haven't used the variable yet.
-
+      $sql = 'INSERT INTO todos (`label`) VALUES (:task)';
       // Prepare SQL query (Prepare Ingredients)
       $query = $database->prepare($sql);
-
       // Execute SQL query (Cook)
       $query->execute([
-          'task' => $task // The 
+          'task' => $task
       ]);
-
       // Redirect user back to index.php after the process
       header("Location: index.php");
       exit;
