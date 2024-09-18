@@ -6,9 +6,6 @@
   // Check whether the user inserts a task
   if(empty($task)){
     // Send alert message if user does not insert a task
-    $_SESSION['error'] = "";
-    header("Location: /");
-    exit;
     setError("Please insert a task!", "/");
   }
   // Store task in the database if the above check has passed
