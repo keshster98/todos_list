@@ -1,22 +1,24 @@
-<?php
-  // Connecting to database
-  $database = connectToDB();
-  // Get todos data from the database
-  // SQL Command (Recipe)
-  $sql = "SELECT * FROM todos";
-  // Prepare SQL query (Prepare Ingredients)
-  $query = $database->prepare($sql);
-  // Execute SQL query (Cook)
-  $query->execute();
-  // Fetch results (Eat)
-  $todos = $query->fetchAll();
-?>
 <?php require "parts/header.php"; ?>
   <div class="card rounded shadow-sm" style="max-width: 500px; margin: 60px auto;">
     <div class="card-body">
       <h3 class="card-title mb-3">My Todo List</h3>
-      <!-- Show if user has logged in -->
-      <?php if(isset($_SESSION['user'])) : ?>
+      <?php if (isset( $_SESSION['user'])) : ?>
+        <?php
+          // connect to the database
+          $database = connectToDB();
+          // load the data
+          // SQL command (recipe)
+          $sql = "SELECT * FROM todos WHERE user_id = :user_id";
+          // prepare (prepare your material)
+          $query = $database->prepare( $sql );
+          // execute (cook)
+          $query->execute([
+            "user_id" => $_SESSION['user']['id']
+          ]);
+          // fetch all (eat)
+          $todos = $query->fetchAll();
+        ?>
+      <!-- Logged in user -->
         <h4 class="mb-4">Welcome back, <?= $_SESSION['user']['name']; ?>!</h4>
         <ul class="list-group">
           <!-- Iterate through the todos table to print out tasks -->
@@ -49,14 +51,14 @@
             </li>
           <?php endforeach; ?>
         </ul>
-      <!-- Show if user has not logged in -->
+      <!-- Non-logged in user -->
       <?php else : ?>
         <!-- Login button -->
         <a href="/login" class="btn btn-success" style="text-decoration: none; color: white">Login</a>
         <!-- Sign up button -->
         <a href="/signup" class="btn btn-primary" style="text-decoration: none; color: white">Sign Up</a>
       <?php endif; ?>
-      <!-- Show if user has logged in -->
+      <!-- Logged in user -->
       <?php if(isset($_SESSION['user'])) : ?>
         <div class="mt-4">
           <!-- Prints error message, if any when adding task -->
@@ -71,7 +73,7 @@
       <?php endif; ?>
     </div>
   </div>
-  <!-- Show if user has logged in -->
+  <!-- Logged in user -->
   <?php if(isset($_SESSION['user'])) : ?>
   <div class="d-flex justify-content-center align-items-center">
     <!-- Logout button  -->

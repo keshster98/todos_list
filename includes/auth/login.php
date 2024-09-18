@@ -6,9 +6,7 @@
     $password = $_POST["password"];
     // Check if the user has filled all fields
     if(empty($email) || empty($password)){
-        $_SESSION['error'] = "Please ensure all fields are filled!";
-        header("Location: /login");
-        exit;
+        setError("Please ensure all fields are filled!", "/login");
     // Carry out login process if the above check has passed
     } else {
         // Check if the email entered is in the database
@@ -33,15 +31,11 @@
                 exit;
             // If the password is wrong
             } else {
-                $_SESSION['error'] = "The password is incorrect, try again!";
-                header("Location: /login");
-                exit;
+                setError("The password is incorrect, try again!", "/login");
             }
         // If the email is not in the database
         } else {
-            $_SESSION['error'] = "Email does not exist, try again!";
-            header("Location: /login");
-            exit;
+            setError("Email does not exist, try again!", "/login");
         }
     }
 ?>

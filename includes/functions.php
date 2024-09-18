@@ -19,7 +19,7 @@
     function setError($message, $path){
         $_SESSION['error'] = $message;
         // Redirect user to required page
-        header("Location: ".$redirect);
+        header("Location: ".$path);
         exit;
     }
 ?>

@@ -8,19 +8,13 @@
     $confirm_password = $_POST["confirm_password"];
     // Check if the user has filled all fields
     if(empty($name) || empty($email) || empty($password) || empty($confirm_password)){
-        $_SESSION['error'] = "Please ensure all the fields are filled up!";
-        header("Location: /signup");
-        exit;
+        setError("Please ensure all the fields are filled up!", "/signup");
     // Check if the user's password matches the confirm password
     } else if($password !== $confirm_password){
-        $_SESSION['error'] = "Your password does not match the confirmation, try again!";
-        header("Location: /signup");
-        exit;
+        setError("Your password does not match the confirmation, try again!", "/signup");
     // Check if the password is at least 8 characters long or more
     } else if(strlen($password) < 8){
-        $_SESSION['error'] = "Please ensure your password is 8 characters or more!";
-        header("Location: /signup");
-        exit;
+        setError("Please ensure your password is 8 characters or more!", "/signup");
     // Update the database with the new user and their details if all above checks have passed
     } else {
         // Check if email has already been used before
@@ -36,9 +30,7 @@
         $user = $query->fetch(); // Returns the first row starting from the query row
         // Send alert message if email already exists
         if($user){
-            $_SESSION['error'] = "Email already in use. Please use another email!";
-            header("Location: /signup");
-            exit;
+            setError("Email already in use. Please use another email!", "/signup");
         }
         // Process sign up if otherwise
         else {
@@ -53,9 +45,7 @@
                 'password' => password_hash($password, PASSWORD_DEFAULT)
             ]);
             // Redirect user back to login.php after the process
-            $_SESSION['error'] = "Successfully signed up!";
-            header("Location: /login");
-            exit;
+            echo '<script>alert("Successfully signed up!");window.location.href="/login"</script>';
         }
     }
 ?>
