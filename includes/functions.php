@@ -1,4 +1,5 @@
 <?php
+    // Function to connect to database
     function connectToDB() {
         // Setup database credential
         $host = 'localhost'; // For Windows user
@@ -12,5 +13,13 @@
             $database_password 
         );
         return $database;
+    }
+
+    // Function to set error messages
+    function setError($message, $path){
+        $_SESSION['error'] = $message;
+        // Redirect user to required page
+        header("Location: ".$redirect);
+        exit;
     }
 ?>
